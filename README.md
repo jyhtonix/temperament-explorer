@@ -2,6 +2,7 @@
 
 A **Temperament Self-Reflection Test**: a standalone HTML web app that helps students understand their natural behavioural tendencies, communication style and ways of working with others.
 
+To access: https://jyhtonix.github.io/temperament-explorer/
 No account, API key, paid service or server required. Just open the file in a browser.
 
 ---
@@ -32,7 +33,7 @@ No account, API key, paid service or server required. Just open the file in a br
 
 ## Getting Started
 
-1. **Open** it in Chrome, Edge or any other modern browser.
+1. **Open - https://jyhtonix.github.io/temperament-explorer/ ** it in Chrome, Edge or any other modern browser.
 3. **Ask students** to answer based on their *usual behaviour*, not the answers they think are most desirable.
 
 ## How Scoring Works
