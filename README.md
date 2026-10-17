@@ -3,6 +3,7 @@
 A **Temperament Self-Reflection Test**: a standalone HTML web app that helps students understand their natural behavioural tendencies, communication style and ways of working with others.
 
 To access: https://jyhtonix.github.io/temperament-explorer/
+
 No account, API key, paid service or server required. Just open the file in a browser.
 
 ---
