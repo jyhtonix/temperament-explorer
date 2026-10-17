@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Temperament Explorer | Student Self-Reflection</title>
+<style>
+:root {
+  --ink:#172033; --muted:#5d687c; --paper:#f5f7fb; --card:#ffffff;
+  --line:#dce3ef; --accent:#3759c7; --accent-dark:#2845a6;
+  --soft:#edf1ff; --good:#197451; --shadow:0 18px 48px rgba(25,40,80,.09);
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top left,#e8eeff 0,transparent 42%),var(--paper);color:var(--ink);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button{font:inherit}
+.wrap{width:min(920px,100% - 32px);margin:0 auto;padding:30px 0 44px}
+header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:24px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{display:grid;place-items:center;width:46px;height:46px;border-radius:15px;background:var(--ink);color:#fff;font-size:23px}
+.brand strong{display:block;font-size:1.02rem;letter-spacing:.01em}
+.brand span{display:block;color:var(--muted);font-size:.84rem}
+.pill{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:7px 12px;font-size:.8rem;white-space:nowrap}
+.hero{padding:28px 0 20px}
+.eyebrow{color:var(--accent);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
+h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.07;letter-spacing:-.045em;margin:10px 0 16px;max-width:760px}
+.hero p{color:var(--muted);max-width:730px;font-size:1.06rem;margin:0}
+.notice{display:flex;gap:12px;margin-top:22px;padding:15px 17px;border:1px solid #d7e0ff;border-radius:15px;background:#f0f4ff;color:#384a7a;font-size:.92rem}
+.notice b{color:#253a81}
+.card{background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
+.card-head{padding:22px 24px 18px;border-bottom:1px solid var(--line)}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:14px;color:var(--muted);font-size:.88rem}
+.progress{height:7px;border-radius:99px;background:#e9edf5;margin-top:13px;overflow:hidden}
+.progress > div{height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .2s ease}
+.card-body{padding:clamp(20px,4vw,34px)}
+.q-label{color:var(--accent);font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+h2{font-size:clamp(1.35rem,3vw,1.8rem);line-height:1.25;margin:10px 0 8px;letter-spacing:-.025em}
+.hint{color:var(--muted);margin:0 0 22px}
+.options{display:grid;gap:11px}
+.option{display:flex;align-items:flex-start;gap:13px;text-align:left;width:100%;padding:15px 16px;border:1.5px solid var(--line);border-radius:15px;background:#fff;color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s,transform .15s}
+.option:hover{border-color:#9eafe9;transform:translateY(-1px)}
+.option[aria-pressed="true"]{border-color:var(--accent);background:var(--soft);box-shadow:0 0 0 2px rgba(55,89,199,.08)}
+.letter{flex:0 0 30px;height:30px;display:grid;place-items:center;border-radius:9px;background:#f0f2f7;color:#4c5870;font-weight:800;font-size:.88rem}
+.option[aria-pressed="true"] .letter{background:var(--accent);color:white}
+.option-text{padding-top:2px}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:25px}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:11px 18px;border-radius:12px;font-weight:750;cursor:pointer}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover:not(:disabled){background:var(--accent-dark)}
+.btn:focus-visible,.option:focus-visible{outline:3px solid #93a9ff;outline-offset:3px}
+.smallprint{color:var(--muted);font-size:.83rem;margin:18px 0 0}
+.result{display:none}
+.result.show{display:block}
+.result-intro{padding:28px 28px 24px;background:linear-gradient(135deg,#eef2ff,#fff)}
+.result-intro h2{font-size:clamp(1.8rem,4vw,2.6rem);margin:7px 0 10px}
+.result-intro p{color:var(--muted);max-width:720px;margin:0}
+.results-body{padding:clamp(20px,4vw,32px)}
+.section-title{font-size:1.12rem;margin:0 0 14px}
+.score-list{display:grid;gap:16px;margin-bottom:28px}
+.score-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:7px;font-size:.94rem}
+.score-top strong{font-weight:800}
+.score-top span{color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{height:10px;border-radius:99px;background:#edf0f6;overflow:hidden}
+.bar div{height:100%;width:0;border-radius:99px;background:var(--accent)}
+.result-description{padding:18px;border:1px solid var(--line);border-radius:16px;margin-bottom:13px}
+.result-description h3{margin:0 0 6px;font-size:1.08rem}
+.result-description p{margin:0;color:var(--muted)}
+.result-description .tag{display:inline-block;margin-bottom:9px;border-radius:99px;background:var(--soft);color:var(--accent);font-size:.76rem;font-weight:800;padding:4px 9px}
+.reflection{background:#f7f8fc;border:1px solid var(--line);border-radius:16px;padding:18px;margin:22px 0}
+.reflection h3{margin:0 0 8px;font-size:1rem}
+.reflection ul{margin:0;padding-left:21px;color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.disclaimer{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.84rem}
+footer{text-align:center;color:var(--muted);font-size:.82rem;margin-top:20px}
+@media(max-width:560px){.wrap{width:min(100% - 20px,920px);padding-top:16px}.pill{display:none}.card{border-radius:18px}.card-head{padding:18px}.nav .btn{padding:11px 13px}.result-intro{padding:22px 20px}.brand span{font-size:.78rem}}
+@media print{body{background:#fff}.wrap{width:100%;padding:0}.hero,header,.quiz,.actions,footer{display:none!important}.result{display:block!important}.card{box-shadow:none;border:0}.result-intro{background:#fff;padding:10px 0}.results-body{padding:10px 0}.result-description{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true">✦</div>
+      <div><strong>Temperament Explorer</strong><span>Student self-reflection activity</span></div>
+    </div>
+    <div class="pill">20 questions · About 5 minutes</div>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">Know yourself a little better</div>
+    <h1>Discover your usual way of responding.</h1>
+    <p>Answer these 20 everyday-situation questions to explore four traditional temperament patterns. There are no right or wrong answers. Choose what is most like your usual behaviour—not what you think the “best” answer should be.</p>
+    <div class="notice"><span aria-hidden="true">ⓘ</span><div><b>A note about accuracy:</b> This is an educational self-reflection activity based on the traditional four-temperament model. It is not a clinically validated psychological test, diagnosis, or measure of ability. People often show a blend of patterns.</div></div>
+  </section>
+
+  <main>
+    <section class="card quiz" id="quizCard" aria-labelledby="questionTitle">
+      <div class="card-head">
+        <div class="topline"><span id="progressLabel">Question 1 of 20</span><span id="answeredLabel">0 answered</span></div>
+        <div class="progress" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0" id="progressBar"><div id="progressFill"></div></div>
+      </div>
+      <div class="card-body">
+        <div class="q-label" id="questionNumber">Question 01</div>
+        <h2 id="questionTitle">When a challenge comes up, I usually…</h2>
+        <p class="hint">Select the one response that best describes you most of the time.</p>
+        <div class="options" id="options" role="group" aria-label="Answer choices"></div>
+        <div class="nav">
+          <button class="btn" id="backBtn" type="button" disabled>← Back</button>
+          <button class="btn primary" id="nextBtn" type="button" disabled>Next →</button>
+        </div>
+        <p class="smallprint">Your answers are used only in this page to calculate your result. This version does not send answers to a server or save them after you close or refresh the page.</p>
+      </div>
+    </section>
+
+    <section class="card result" id="resultCard" aria-live="polite" aria-labelledby="resultTitle">
+      <div class="result-intro">
+        <div class="eyebrow">Your reflection profile</div>
+        <h2 id="resultTitle">Your results</h2>
+        <p id="resultSummary"></p>
+      </div>
+      <div class="results-body">
+        <h3 class="section-title">Your scores</h3>
+        <div class="score-list" id="scoreList"></div>
+        <h3 class="section-title">What each pattern may look like</h3>
+        <div id="descriptions"></div>
+        <div class="reflection">
+          <h3>Questions for reflection</h3>
+          <ul>
+            <li>Which description feels most familiar—and which feels less like you?</li>
+            <li>When might your strongest pattern help you in study or teamwork?</li>
+            <li>What is one habit you could practise to work better with people who respond differently?</li>
+          </ul>
+        </div>
+        <div class="disclaimer"><strong>Interpret results thoughtfully.</strong> The scores show which options you selected in this activity; they do not prove that you belong to a fixed personality type. Your behaviour can vary by context, culture, experience and situation. Do not use this activity for diagnosis, selection, grading, or other high-stakes decisions.</div>
+        <div class="actions">
+          <button class="btn primary" id="printBtn" type="button">Print / Save results as PDF</button>
+          <button class="btn" id="restartBtn" type="button">Retake the test</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>For learning and self-awareness · No account or API key required</footer>
+</div>
+
+<script>
+"use strict";
+
+const TYPES = {
+  Choleric: {
+    label: "Choleric · The Driver",
+    short: "Driver",
+    description: "Often associated with decisiveness, initiative and a focus on goals. A useful development area may be slowing down to hear other perspectives and checking how your directness affects others.",
+    strength: "Taking initiative and moving a task forward",
+    watchout: "Impatience or coming across as overly forceful"
+  },
+  Sanguine: {
+    label: "Sanguine · The Socialiser",
+    short: "Socialiser",
+    description: "Often associated with enthusiasm, expressiveness and enjoying social interaction. A useful development area may be building routines, following through and allowing time for careful detail.",
+    strength: "Engaging people and sharing ideas",
+    watchout: "Distraction or losing track of follow-up tasks"
+  },
+  Phlegmatic: {
+    label: "Phlegmatic · The Peacemaker",
+    short: "Peacemaker",
+    description: "Often associated with patience, steadiness and cooperation. A useful development area may be voicing your own needs, addressing problems early and adapting when change is necessary.",
+    strength: "Supporting cooperation and staying steady",
+    watchout: "Avoiding difficult conversations or delaying action"
+  },
+  Melancholic: {
+    label: "Melancholic · The Analyst",
+    short: "Analyst",
+    description: "Often associated with careful analysis, planning and attention to quality. A useful development area may be accepting that some tasks need a good-enough answer rather than endless checking.",
+    strength: "Noticing details and thinking things through",
+    watchout: "Perfectionism or overthinking"
+  }
+};
+
+// Each question has exactly one option for each temperament.
+// The answer order is rotated to reduce position-based response bias.
+const QUESTIONS = [
+  {q:"When a challenge comes up, I usually…", a:[
+    ["Choleric","Take initiative and start working towards a solution."],
+    ["Sanguine","Talk through ideas and explore possibilities with others."],
+    ["Phlegmatic","Stay calm and take one step at a time."],
+    ["Melancholic","Gather information and analyse the details first."]
+  ]},
+  {q:"In a group assignment, I am most likely to…", a:[
+    ["Sanguine","Encourage discussion and help everyone share ideas."],
+    ["Phlegmatic","Help the group cooperate and keep things on track calmly."],
+    ["Melancholic","Check the requirements and review the quality of the work."],
+    ["Choleric","Help set goals and organise who does what."]
+  ]},
+  {q:"When plans suddenly change, I tend to…", a:[
+    ["Phlegmatic","Adjust steadily and try to keep things calm."],
+    ["Melancholic","Work out what changed and what needs to be revised."],
+    ["Choleric","Decide on the next step and move forward."],
+    ["Sanguine","Look for an interesting new possibility."]
+  ]},
+  {q:"When receiving constructive feedback, I usually…", a:[
+    ["Melancholic","Think carefully about the details and how to improve."],
+    ["Choleric","Identify the action needed to fix the issue."],
+    ["Sanguine","Discuss it openly and then focus on moving forward."],
+    ["Phlegmatic","Listen calmly and consider it without escalating tension."]
+  ]},
+  {q:"The part of a project I naturally focus on most is…", a:[
+    ["Choleric","Making progress and achieving the goal."],
+    ["Phlegmatic","Helping the team work smoothly together."],
+    ["Sanguine","Making the project engaging and sharing it with others."],
+    ["Melancholic","Ensuring the work is accurate and well organised."]
+  ]},
+  {q:"If a disagreement occurs, I am most likely to…", a:[
+    ["Sanguine","Express my view and try to reconnect with the person."],
+    ["Melancholic","Compare the facts and explain my reasoning."],
+    ["Phlegmatic","Look for common ground and reduce tension."],
+    ["Choleric","Address the issue directly and seek a decision."]
+  ]},
+  {q:"When I have several deadlines, I prefer to…", a:[
+    ["Melancholic","Make a detailed plan and check requirements carefully."],
+    ["Sanguine","Keep the work lively by switching between interesting tasks."],
+    ["Choleric","Prioritise outcomes and tackle the most urgent task."],
+    ["Phlegmatic","Work steadily through the list at a manageable pace."]
+  ]},
+  {q:"People working with me can usually count on me to…", a:[
+    ["Phlegmatic","Be patient, steady and supportive."],
+    ["Choleric","Take responsibility and push towards completion."],
+    ["Melancholic","Notice errors and maintain careful standards."],
+    ["Sanguine","Bring energy and help people feel involved."]
+  ]},
+  {q:"In a new social or learning environment, I usually…", a:[
+    ["Choleric","Look for what needs doing and get involved."],
+    ["Sanguine","Start conversations and meet people."],
+    ["Melancholic","Observe first and learn how things work."],
+    ["Phlegmatic","Settle in quietly and connect at a comfortable pace."]
+  ]},
+  {q:"When making an important choice, I tend to prioritise…", a:[
+    ["Sanguine","The possibilities and how people may respond."],
+    ["Phlegmatic","A balanced outcome that people can live with."],
+    ["Choleric","Effectiveness and a clear result."],
+    ["Melancholic","Evidence, risks and careful consideration."]
+  ]},
+  {q:"If a teammate is struggling, I am most likely to…", a:[
+    ["Melancholic","Help identify the exact problem and review the steps."],
+    ["Phlegmatic","Listen patiently and offer steady support."],
+    ["Sanguine","Encourage them and lift their spirits."],
+    ["Choleric","Help them choose a next step and take action."]
+  ]},
+  {q:"My ideal study or work session is one where I can…", a:[
+    ["Phlegmatic","Work at a steady pace with minimal conflict or pressure."],
+    ["Sanguine","Interact, exchange ideas and keep the energy up."],
+    ["Melancholic","Focus carefully with clear instructions and resources."],
+    ["Choleric","Work towards a clear target and see visible progress."]
+  ]},
+  {q:"When I notice a mistake in a shared task, I usually…", a:[
+    ["Sanguine","Mention it constructively and help keep the mood positive."],
+    ["Choleric","Flag it and focus on getting it corrected quickly."],
+    ["Phlegmatic","Raise it calmly and help the group resolve it."],
+    ["Melancholic","Check the details to understand exactly what went wrong."]
+  ]},
+  {q:"When starting something unfamiliar, I prefer to…", a:[
+    ["Choleric","Try it, learn by doing and adjust as needed."],
+    ["Melancholic","Read the instructions and understand the process first."],
+    ["Sanguine","Explore it with others and learn through discussion."],
+    ["Phlegmatic","Take my time and build confidence step by step."]
+  ]},
+  {q:"What tends to drain my energy most?", a:[
+    ["Melancholic","Unclear expectations and work full of avoidable errors."],
+    ["Phlegmatic","Ongoing conflict or pressure to change everything suddenly."],
+    ["Sanguine","Long periods with little interaction or variety."],
+    ["Choleric","Repeated delays when decisions or action are needed."]
+  ]},
+  {q:"When I explain an idea, I usually…", a:[
+    ["Phlegmatic","Explain it calmly and make space for other views."],
+    ["Sanguine","Speak expressively and build on the group's reactions."],
+    ["Choleric","Get to the point and emphasise the intended outcome."],
+    ["Melancholic","Present it in a structured way with supporting details."]
+  ]},
+  {q:"If a team has no clear direction, I am most likely to…", a:[
+    ["Sanguine","Get people talking about possible directions."],
+    ["Melancholic","Clarify the requirements and compare possible plans."],
+    ["Phlegmatic","Help everyone agree on a workable approach."],
+    ["Choleric","Suggest a direction and organise the next actions."]
+  ]},
+  {q:"When working towards a personal goal, I usually…", a:[
+    ["Melancholic","Track details and plan carefully for possible obstacles."],
+    ["Choleric","Set a target and push myself to achieve it."],
+    ["Phlegmatic","Build a steady routine that I can maintain."],
+    ["Sanguine","Stay motivated by making it enjoyable and sharing progress."]
+  ]},
+  {q:"In a busy or stressful situation, I try to…", a:[
+    ["Choleric","Focus on priorities and decide what to do first."],
+    ["Sanguine","Talk things through and keep morale up."],
+    ["Phlegmatic","Remain composed and handle one thing at a time."],
+    ["Melancholic","Review the facts so I do not overlook something important."]
+  ]},
+  {q:"Which contribution feels most natural to you?", a:[
+    ["Sanguine","Bringing people together and generating enthusiasm."],
+    ["Melancholic","Improving accuracy, structure and quality."],
+    ["Choleric","Leading action and driving towards a goal."],
+    ["Phlegmatic","Providing consistency, patience and cooperation."]
+  ]}
+];
+
+const TYPE_KEYS = ["Choleric","Sanguine","Phlegmatic","Melancholic"];
+const answers = Array(QUESTIONS.length).fill(null);
+let current = 0;
+
+const $ = id => document.getElementById(id);
+const optionsEl = $("options");
+const quizCard = $("quizCard");
+const resultCard = $("resultCard");
+
+function validateQuestionBank() {
+  if (QUESTIONS.length !== 20) throw new Error("Question bank must contain exactly 20 questions.");
+  QUESTIONS.forEach((question, index) => {
+    const keys = question.a.map(option => option[0]);
+    if (question.a.length !== 4 || new Set(keys).size !== 4 ||
+        !TYPE_KEYS.every(type => keys.includes(type))) {
+      throw new Error("Question " + (index + 1) + " must have one option for each temperament.");
+    }
+    if (question.a.some(option => typeof option[1] !== "string" || !option[1].trim())) {
+      throw new Error("Question " + (index + 1) + " contains an empty option.");
+    }
+  });
+}
+function renderQuestion() {
+  const question = QUESTIONS[current];
+  $("progressLabel").textContent = `Question ${current + 1} of ${QUESTIONS.length}`;
+  $("answeredLabel").textContent = `${answers.filter(Boolean).length} answered`;
+  $("progressFill").style.width = `${(answers.filter(Boolean).length / QUESTIONS.length) * 100}%`;
+  $("progressBar").setAttribute("aria-valuenow", answers.filter(Boolean).length);
+  $("questionNumber").textContent = `Question ${String(current + 1).padStart(2, "0")}`;
+  $("questionTitle").textContent = question.q;
+  optionsEl.replaceChildren();
+
+  question.a.forEach((option, index) => {
+    const [type, label] = option;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "option";
+    button.setAttribute("aria-pressed", answers[current] === type ? "true" : "false");
+    button.innerHTML = `<span class="letter">${String.fromCharCode(65 + index)}</span><span class="option-text"></span>`;
+    button.querySelector(".option-text").textContent = label;
+    button.addEventListener("click", () => {
+      answers[current] = type;
+      renderQuestion();
+    });
+    optionsEl.appendChild(button);
+  });
+
+  $("backBtn").disabled = current === 0;
+  $("nextBtn").disabled = !answers[current];
+  $("nextBtn").textContent = current === QUESTIONS.length - 1 ? "See my results →" : "Next →";
+}
+function calculateScores() {
+  const scores = Object.fromEntries(TYPE_KEYS.map(type => [type, 0]));
+  answers.forEach(type => { if (type) scores[type] += 1; });
+  return scores;
+}
+function showResults() {
+  if (answers.some(answer => !answer)) {
+    const firstMissing = answers.findIndex(answer => !answer);
+    current = firstMissing;
+    renderQuestion();
+    return;
+  }
+  const scores = calculateScores();
+  const sorted = [...TYPE_KEYS].sort((a, b) => scores[b] - scores[a]);
+  const highest = scores[sorted[0]];
+  const leaders = sorted.filter(type => scores[type] === highest);
+  const total = answers.length;
+
+  $("resultTitle").textContent = leaders.length === 1
+    ? `Your highest-scoring pattern: ${TYPES[leaders[0]].short}`
+    : "You have a blended top score";
+  $("resultSummary").textContent = leaders.length === 1
+    ? `${TYPES[leaders[0]].label} received ${highest} of your ${total} responses. Your next-highest score is ${scores[sorted.find(type => !leaders.includes(type))] ?? highest}. Read the full profile below as a reflection prompt, not a fixed label.`
+    : `${leaders.map(type => TYPES[type].label).join(" and ")} share your highest score (${highest} each). This activity does not force a single type: you may recognise aspects of several patterns.`;
+
+  const scoreList = $("scoreList");
+  scoreList.replaceChildren();
+  sorted.forEach(type => {
+    const row = document.createElement("div");
+    row.innerHTML = `<div class="score-top"><strong></strong><span></span></div><div class="bar" role="img"><div></div></div>`;
+    row.querySelector("strong").textContent = TYPES[type].label;
+    row.querySelector("span").textContent = `${scores[type]} / 20 responses`;
+    row.querySelector(".bar").setAttribute("aria-label", `${TYPES[type].label}: ${scores[type]} out of 20`);
+    row.querySelector(".bar div").style.width = `${scores[type] / total * 100}%`;
+    scoreList.appendChild(row);
+  });
+
+  const descriptions = $("descriptions");
+  descriptions.replaceChildren();
+  sorted.forEach(type => {
+    const box = document.createElement("div");
+    box.className = "result-description";
+    if (leaders.includes(type)) {
+      const tag = document.createElement("div");
+      tag.className = "tag";
+      tag.textContent = leaders.length > 1 ? "JOINT HIGHEST SCORE" : "HIGHEST SCORE";
+      box.appendChild(tag);
+    }
+    const title = document.createElement("h3");
+    title.textContent = TYPES[type].label;
+    const paragraph = document.createElement("p");
+    paragraph.textContent = TYPES[type].description;
+    const strength = document.createElement("p");
+    strength.style.marginTop = "9px";
+    strength.style.color = "var(--ink)";
+    strength.textContent = `Possible strength: ${TYPES[type].strength}.`;
+    const watchout = document.createElement("p");
+    watchout.style.marginTop = "4px";
+    watchout.style.color = "var(--muted)";
+    watchout.textContent = `Possible watch-out: ${TYPES[type].watchout}.`;
+    box.append(title, paragraph, strength, watchout);
+    descriptions.appendChild(box);
+  });
+
+  quizCard.style.display = "none";
+  resultCard.classList.add("show");
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+$("backBtn").addEventListener("click", () => {
+  if (current > 0) { current--; renderQuestion(); }
+});
+$("nextBtn").addEventListener("click", () => {
+  if (!answers[current]) return;
+  if (current < QUESTIONS.length - 1) { current++; renderQuestion(); }
+  else showResults();
+});
+$("restartBtn").addEventListener("click", () => {
+  answers.fill(null);
+  current = 0;
+  resultCard.classList.remove("show");
+  quizCard.style.display = "";
+  renderQuestion();
+  window.scrollTo({top: 0, behavior: "smooth"});
+});
+$("printBtn").addEventListener("click", () => window.print());
+
+validateQuestionBank();
+renderQuestion();
+</script>
+</body>
+</html>
