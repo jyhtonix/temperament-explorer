@@ -32,10 +32,8 @@ No account, API key, paid service or server required. Just open the file in a br
 
 ## Getting Started
 
-1. **Download** the HTML file.
-2. **Open** it in Chrome, Edge or any other modern browser.
-3. **Share** the file with your students, or deploy it on a static hosting platform such as [Vercel](https://vercel.com).
-4. **Ask students** to answer based on their *usual behaviour*, not the answers they think are most desirable.
+1. **Open** it in Chrome, Edge or any other modern browser.
+3. **Ask students** to answer based on their *usual behaviour*, not the answers they think are most desirable.
 
 ## How Scoring Works
 
