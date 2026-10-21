@@ -118,3 +118,8 @@ A temperament test is not exactly the same as a personality test.
 - Describe this as a **Temperament Self-Reflection Test**, not a formal psychological test.
 - Encourage honest answers over "ideal" answers.
 - Use the self-reflection questions as discussion prompts in class.
+
+## Infographics
+![Project Screenshot](https://github.com/username/repo/blob/main/Temperament_test_image.jpeg?raw=true)
+
+
