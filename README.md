@@ -120,6 +120,6 @@ A temperament test is not exactly the same as a personality test.
 - Use the self-reflection questions as discussion prompts in class.
 
 ## Infographics
-![Project Screenshot](https://github.com/username/repo/blob/main/Temperament_test_image.jpeg?raw=true)
+![Project Screenshot](https://github.com/jyhtonix/repo/blob/main/Temperament_test_image.jpeg?raw=true)
 
 
